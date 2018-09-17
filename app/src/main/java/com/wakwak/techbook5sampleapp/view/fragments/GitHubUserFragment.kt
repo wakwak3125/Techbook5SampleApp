@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.wakwak.techbook5sampleapp.R
+import com.wakwak.techbook5sampleapp.databinding.DialogUserSearchBinding
 import com.wakwak.techbook5sampleapp.databinding.FragmentGitHubUserBinding
 import com.wakwak.techbook5sampleapp.presentation.binding_data.GitHubUserBindableData
 import com.wakwak.techbook5sampleapp.presentation.presenters.GitHubUserPresenter
@@ -27,8 +30,12 @@ class GitHubUserFragment : Fragment(), IGitHubUserView {
         presenter.attach(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         binding = FragmentGitHubUserBinding.inflate(inflater, container, false)
+        binding.toolbar.inflateMenu(R.menu.menu_git_hub_user)
+        binding.toolbar.setOnMenuItemClickListener { presenter.onClickMenuItem(it.itemId) }
         return binding.root
     }
 
@@ -43,5 +50,17 @@ class GitHubUserFragment : Fragment(), IGitHubUserView {
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showSearchDialog() {
+        val dialogBinding = DialogUserSearchBinding.inflate(LayoutInflater.from(requireContext()))
+        AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.dialog_title_search_git_hub_user))
+                .setView(dialogBinding.root)
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    presenter.showGitHubUserByUserName(dialogBinding.editText.text?.toString())
+                    dialog.dismiss()
+                }
+                .show()
     }
 }

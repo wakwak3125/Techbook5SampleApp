@@ -8,10 +8,12 @@ class GitHubUserPageUseCase(private val githubUserRepository: IGitHubUserReposit
     : IGitHubUserPageUseCase {
 
     override fun getGitHubUser(userName: String?): Flowable<GitHubUser> {
-        userName?.isEmpty() ?: return Flowable.error(EmptyUserNameException())
+        if (userName == null || userName.isEmpty()) {
+            return Flowable.error(EmptyUserNameException())
+        }
         return githubUserRepository.getGitHubUser(userName)
     }
 
     inner class EmptyUserNameException
-        : IllegalArgumentException("userName must provided")
+        : IllegalArgumentException("UserName must be provided")
 }

@@ -4,4 +4,5 @@ import com.wakwak.techbook5sampleapp.presentation.binding_data.GitHubUserBindabl
 
 interface IGitHubUserView : IView<GitHubUserBindableData> {
 
+    fun showSearchDialog()
 }

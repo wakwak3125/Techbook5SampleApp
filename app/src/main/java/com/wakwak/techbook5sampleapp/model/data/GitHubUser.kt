@@ -17,5 +17,5 @@ data class GitHubUser(
         val avatarUrl: String,
         @ColumnInfo(name = "bio")
         @Json(name = "bio")
-        val bio: String
+        val bio: String?
 )

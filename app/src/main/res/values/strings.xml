@@ -2,4 +2,8 @@
     <string name="app_name">Techbook5SampleApp</string>
     <string name="error_failed_to_fetch_user">Failed to fetch user</string>
     <string name="msg_no_bio">No bio provided</string>
+    <string name="search">Search</string>
+    <string name="hint_user_name">User name</string>
+    <string name="dialog_title_search_git_hub_user">Search GitHub User</string>
+    <string name="ok">OK</string>
 </resources>

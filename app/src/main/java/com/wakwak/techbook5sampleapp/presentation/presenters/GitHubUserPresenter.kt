@@ -41,10 +41,10 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
         view.bind(with(bindableData) {
             bindableData.userName = gitHubUser.userName
             bindableData.avatarUrl = gitHubUser.avatarUrl
-            bindableData.bio = if (wrapper.isEmpty(gitHubUser.bio)) {
-                getString(R.string.msg_no_bio)
-            } else {
+            bindableData.bio = if (gitHubUser.bio != null && gitHubUser.bio.isNotEmpty()) {
                 gitHubUser.bio
+            } else {
+                getString(R.string.msg_no_bio)
             }
             bindableData.loadingVisibility = false
             return@with this
@@ -68,5 +68,13 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
                 view.showMessage(defaultErrorMessage)
             }
         }
+    }
+
+    fun onClickMenuItem(itemId: Int) = when (itemId) {
+        R.id.search -> {
+            view.showSearchDialog()
+            true
+        }
+        else -> false
     }
 }

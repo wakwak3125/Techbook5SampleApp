@@ -14,6 +14,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         val db = Room.databaseBuilder<AppDatabase>(this, AppDatabase::class.java, "app-database")
+                .fallbackToDestructiveMigration()
                 .build()
         startKoin(this, arrayListOf(Modules(this, db).appModule))
         setUpRxJavaPlugins()
