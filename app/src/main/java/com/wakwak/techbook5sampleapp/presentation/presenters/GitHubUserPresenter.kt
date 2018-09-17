@@ -36,11 +36,11 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
     }
 
     private fun apply(gitHubUser: GitHubUser) {
-        view.showMessage(gitHubUser.userName)
         view.bind(with(bindableData) {
             bindableData.userName = gitHubUser.userName
             bindableData.avatarUrl = gitHubUser.avatarUrl
             bindableData.bio = if (wrapper.isEmpty(gitHubUser.bio)) getString(R.string.msg_no_bio) else gitHubUser.bio
+            bindableData.loadingVisibility = false
             return@with this
         })
     }

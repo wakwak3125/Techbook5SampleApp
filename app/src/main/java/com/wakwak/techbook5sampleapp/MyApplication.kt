@@ -13,7 +13,8 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val db = Room.databaseBuilder<AppDatabase>(this, AppDatabase::class.java, "app-database").build()
+        val db = Room.databaseBuilder<AppDatabase>(this, AppDatabase::class.java, "app-database")
+                .build()
         startKoin(this, arrayListOf(Modules(this, db).appModule))
         setUpRxJavaPlugins()
     }
