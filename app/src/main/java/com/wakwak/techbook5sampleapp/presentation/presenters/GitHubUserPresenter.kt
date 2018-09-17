@@ -2,6 +2,7 @@ package com.wakwak.techbook5sampleapp.presentation.presenters
 
 import com.wakwak.techbook5sampleapp.R
 import com.wakwak.techbook5sampleapp.model.data.GitHubUser
+import com.wakwak.techbook5sampleapp.model.usecases.GitHubUserPageUseCase
 import com.wakwak.techbook5sampleapp.model.usecases.IGitHubUserPageUseCase
 import com.wakwak.techbook5sampleapp.presentation.binding_data.GitHubUserBindableData
 import com.wakwak.techbook5sampleapp.utils.IAndroidWrapper
@@ -31,7 +32,7 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
                 .doOnTerminate { setLoadingVisibility(false) }
                 .subscribe(
                         { apply(it) },
-                        { view.showMessage(getString(R.string.error_failed_to_fetch_user)) })
+                        { showErrorMessage(it) })
         disposables.add(disposable)
     }
 
@@ -50,5 +51,17 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
             bindableData.loadingVisibility = visibility
             return@with this
         })
+    }
+
+    private fun showErrorMessage(e: Throwable) {
+        val defaultErrorMessage = getString(R.string.error_failed_to_fetch_user)
+        when (e) {
+            is GitHubUserPageUseCase.EmptyUserNameException -> {
+                view.showMessage(e.message ?: defaultErrorMessage)
+            }
+            else -> {
+                view.showMessage(defaultErrorMessage)
+            }
+        }
     }
 }
