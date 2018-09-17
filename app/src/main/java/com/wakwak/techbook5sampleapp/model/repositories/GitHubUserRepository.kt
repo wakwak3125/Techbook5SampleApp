@@ -17,7 +17,9 @@ class GitHubUserRepository(private val api: GitHubService,
 
     override fun getGitHubUser(userName: String): Flowable<GitHubUser> {
         return Maybe.concat(
-                store.find(userName).subscribeOn(Schedulers.io()).toMaybe().onErrorComplete(),
+                store.find(userName).subscribeOn(Schedulers.io())
+                        .toMaybe()
+                        .onErrorComplete(),
                 api.getGitHubUser(userName).toMaybe().map {
                     store.createGitHubUser(it)
                     return@map it
