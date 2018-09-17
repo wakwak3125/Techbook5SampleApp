@@ -3,15 +3,23 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="bindable"
             type="com.wakwak.techbook5sampleapp.presentation.binding_data.GitHubUserBindableData" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    </LinearLayout>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{bindable.loadingVisibility ? View.VISIBLE : View.GONE}" />
+
+    </FrameLayout>
 </layout>
