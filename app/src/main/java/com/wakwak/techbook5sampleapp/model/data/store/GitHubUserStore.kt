@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.wakwak.techbook5sampleapp.model.data.GitHubUser
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
@@ -17,5 +18,5 @@ interface GitHubUserStore {
     fun find(userName: String): Single<GitHubUser>
 
     @Query("SELECT * FROM GitHubUser")
-    fun findAll(): Single<List<GitHubUser>>
+    fun findAll(): Flowable<List<GitHubUser>>
 }

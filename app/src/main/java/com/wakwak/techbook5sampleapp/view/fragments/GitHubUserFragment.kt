@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wakwak.techbook5sampleapp.R
 import com.wakwak.techbook5sampleapp.databinding.DialogUserSearchBinding
 import com.wakwak.techbook5sampleapp.databinding.FragmentGitHubUserBinding
+import com.wakwak.techbook5sampleapp.model.data.GitHubUser
 import com.wakwak.techbook5sampleapp.presentation.binding_data.GitHubUserBindableData
 import com.wakwak.techbook5sampleapp.presentation.presenters.GitHubUserPresenter
+import com.wakwak.techbook5sampleapp.view.epoxy_controllers.GitHubUserController
 import com.wakwak.techbook5sampleapp.view.view.IGitHubUserView
 import org.koin.android.ext.android.inject
 
@@ -24,6 +28,7 @@ class GitHubUserFragment : Fragment(), IGitHubUserView {
 
     private val presenter: GitHubUserPresenter by inject()
     private lateinit var binding: FragmentGitHubUserBinding
+    private lateinit var fetchedUserController: GitHubUserController
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -36,11 +41,23 @@ class GitHubUserFragment : Fragment(), IGitHubUserView {
         binding = FragmentGitHubUserBinding.inflate(inflater, container, false)
         binding.toolbar.inflateMenu(R.menu.menu_git_hub_user)
         binding.toolbar.setOnMenuItemClickListener { presenter.onClickMenuItem(it.itemId) }
+        val toggle = ActionBarDrawerToggle(
+                requireActivity(),
+                binding.drawerLayout,
+                binding.toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        binding.drawerItems.layoutManager = LinearLayoutManager(requireContext())
+        fetchedUserController = GitHubUserController(presenter)
+        binding.drawerItems.adapter = fetchedUserController.adapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter.setUpDrawerItems()
         presenter.showGitHubUserByUserName("wakwak3125")
     }
 
@@ -48,8 +65,16 @@ class GitHubUserFragment : Fragment(), IGitHubUserView {
         binding.bindable = bindable
     }
 
+    override fun setUpDrawerItems(users: List<GitHubUser>) {
+        fetchedUserController.setData(users)
+    }
+
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun closeDrawer() {
+        binding.drawerLayout.closeDrawers()
     }
 
     override fun showSearchDialog() {

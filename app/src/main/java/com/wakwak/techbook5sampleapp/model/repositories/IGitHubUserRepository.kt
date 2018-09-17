@@ -6,4 +6,6 @@ import io.reactivex.Flowable
 interface IGitHubUserRepository {
 
     fun getGitHubUser(userName: String): Flowable<GitHubUser>
+
+    fun getGitHubUsers(): Flowable<List<GitHubUser>>
 }

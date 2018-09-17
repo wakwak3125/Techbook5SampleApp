@@ -6,4 +6,6 @@
     <string name="hint_user_name">User name</string>
     <string name="dialog_title_search_git_hub_user">Search GitHub User</string>
     <string name="ok">OK</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

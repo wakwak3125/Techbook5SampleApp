@@ -26,4 +26,8 @@ class GitHubUserRepository(private val api: GitHubService,
                 }
         )
     }
+
+    override fun getGitHubUsers(): Flowable<List<GitHubUser>> {
+        return store.findAll().subscribeOn(Schedulers.io())
+    }
 }

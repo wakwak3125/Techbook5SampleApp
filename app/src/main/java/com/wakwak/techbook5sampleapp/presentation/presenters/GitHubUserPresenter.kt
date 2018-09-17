@@ -9,6 +9,7 @@ import com.wakwak.techbook5sampleapp.utils.IAndroidWrapper
 import com.wakwak.techbook5sampleapp.view.view.IGitHubUserView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 
 class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
                           wrapper: IAndroidWrapper)
@@ -28,13 +29,23 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
 
     fun showGitHubUserByUserName(userName: String?) {
         setLoadingVisibility(true)
-        val disposable = useCase.getGitHubUser(userName)
+        useCase.getGitHubUser(userName)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate { setLoadingVisibility(false) }
                 .subscribe(
                         { apply(it) },
                         { showErrorMessage(it) })
-        disposables.add(disposable)
+                .addTo(disposables)
+    }
+
+    fun setUpDrawerItems() {
+        useCase.getGitHubUsers()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { view.setUpDrawerItems(it) },
+                        { /*no-op*/ },
+                        { /*no-op*/ })
+                .addTo(disposables)
     }
 
     private fun apply(gitHubUser: GitHubUser) {
@@ -68,6 +79,11 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
                 view.showMessage(defaultErrorMessage)
             }
         }
+    }
+
+    fun onClickFetchedUser(userName: String) {
+        showGitHubUserByUserName(userName)
+        view.closeDrawer()
     }
 
     fun onClickMenuItem(itemId: Int) = when (itemId) {
