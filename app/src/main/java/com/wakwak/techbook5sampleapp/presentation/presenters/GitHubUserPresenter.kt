@@ -11,7 +11,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
-                          wrapper: IAndroidWrapper) : Presenter<IGitHubUserView>(wrapper) {
+                          wrapper: IAndroidWrapper)
+    : Presenter<IGitHubUserView>(wrapper) {
 
     private lateinit var view: IGitHubUserView
     private val disposables: CompositeDisposable = CompositeDisposable()
@@ -40,7 +41,11 @@ class GitHubUserPresenter(private val useCase: IGitHubUserPageUseCase,
         view.bind(with(bindableData) {
             bindableData.userName = gitHubUser.userName
             bindableData.avatarUrl = gitHubUser.avatarUrl
-            bindableData.bio = if (wrapper.isEmpty(gitHubUser.bio)) getString(R.string.msg_no_bio) else gitHubUser.bio
+            bindableData.bio = if (wrapper.isEmpty(gitHubUser.bio)) {
+                getString(R.string.msg_no_bio)
+            } else {
+                gitHubUser.bio
+            }
             bindableData.loadingVisibility = false
             return@with this
         })
