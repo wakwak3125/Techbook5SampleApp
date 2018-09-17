@@ -15,4 +15,7 @@ interface GitHubUserStore {
 
     @Query("SELECT * FROM GitHubUser WHERE user_name = :userName")
     fun find(userName: String): Single<GitHubUser>
+
+    @Query("SELECT * FROM GitHubUser")
+    fun findAll(): Single<List<GitHubUser>>
 }
