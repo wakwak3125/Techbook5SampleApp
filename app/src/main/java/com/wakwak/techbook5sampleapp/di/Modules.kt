@@ -30,7 +30,9 @@ class Modules(private val context: Context,
             Retrofit.Builder()
                     .baseUrl("https://api.github.com")
                     .client(OkHttpClient.Builder().addInterceptor(createInterceptor(get())).build())
-                    .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build()))
+                    .addConverterFactory(
+                            MoshiConverterFactory.create(
+                                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .build()
                     .create(GitHubService::class.java)
