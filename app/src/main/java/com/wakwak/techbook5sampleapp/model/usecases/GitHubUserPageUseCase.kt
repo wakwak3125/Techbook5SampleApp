@@ -19,6 +19,6 @@ class GitHubUserPageUseCase(private val githubUserRepository: IGitHubUserReposit
         return githubUserRepository.getGitHubUsers()
     }
 
-    inner class EmptyUserNameException
+    class EmptyUserNameException
         : IllegalArgumentException("UserName must be provided")
 }
